@@ -8,10 +8,14 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	_ "github.com/lib/pq"
 	"github.com/spf13/viper"
+	"github.com/sirupsen/logrus"
+	"github.com/go-redis/redis"
 )
 
+var redisdb *redis.Client
+
 func InitDatabase() (db *gorm.DB, err error) {
-	dbDriver := viper.GetString("DB_DRIVER")
+	dbDriver := "mysql"
 	var connectionString string
 
 	if dbDriver == "mysql" {
@@ -21,6 +25,8 @@ func InitDatabase() (db *gorm.DB, err error) {
 	} else if dbDriver == "sqlite3" {
 		connectionString = buildSqliteConnectionString()
 	}
+
+	logrus.Infoln("Connection String " + connectionString)
 
 	db, err = openConnection(dbDriver, connectionString)
 
@@ -36,10 +42,10 @@ func openConnection(dbDriver, connection string) (db *gorm.DB, err error) {
 }
 
 func buildMysqlConnectionString() (connectionString string) {
-	connectionString = fmt.Sprintf("%s:%s@/%s?charset=utf8&parseTime=True&loc=Local",
-		viper.GetString("DB_USERNAME"),
-		viper.GetString("DB_PASSWORD"),
-		viper.GetString("DB_NAME"))
+	connectionString = fmt.Sprintf("%s:%s@tcp(db:3306)/%s?charset=utf8&parseTime=True&loc=Local",
+		"root",
+		"root",
+		"db")
 
 	return
 }
@@ -59,4 +65,14 @@ func buildPostgresqlConnectionString() (connectionString string) {
 func buildSqliteConnectionString() (connectionString string) {
 	connectionString = viper.GetString("DB_NAME")
 	return
+}
+
+func BuildRedisInstance() (*redis.Client) {
+	redisdb := redis.NewClient(&redis.Options{
+		Addr: "redis:6379",
+		Password: "",
+		DB: 0,
+	})
+
+	return redisdb
 }

@@ -1,30 +1,31 @@
 package database
 
 import (
-	"github.com/ecojuntak/gorb/repositories"
-	"github.com/jinzhu/gorm"
-	"github.com/sirupsen/logrus"
+	// "github.com/ecojuntak/gorb/repositories"
+	// "github.com/jinzhu/gorm"
+	// "github.com/sirupsen/logrus"
 
-	"github.com/bxcodec/faker"
-	"github.com/ecojuntak/gorb/models"
+	// // "github.com/bxcodec/faker"
+	// // "github.com/bxcodec/faker/support/slice"
+	// "github.com/ecojuntak/gorb/models"
 )
 
-func RunSeeder(db *gorm.DB) (err error) {
-	var user = models.User{}
+func RunSeeder() {
+	// var user = models.User{}
 
-	userRepo := repositories.NewUserRepo(db)
+	// userRepo := repositories.NewUserRepo(db)
 
-	for i := 0; i < 10; i++ {
-		err = faker.FakeData(&user)
+	// for i := 0; i < 10; i++ {
+	// 	err = faker.FakeData(&user)
 
-		if err != nil {
-			logrus.Fatalln(err)
-		}
+	// 	if err != nil {
+	// 		logrus.Fatalln(err)
+	// 	}
 
-		u := userRepo.Create(user)
+	// 	u := userRepo.Create(user)
 
-		logrus.Println(u)
-	}
+	// 	logrus.Println(u)
+	// }
 
-	return nil
+	// return nil
 }
